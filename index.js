@@ -6,6 +6,7 @@ const cors = require('cors')
 
 const port = 3001
 const app = express()
+app.use(cors())
 app.use(express.json())
 
 const pedidos = []
@@ -37,20 +38,20 @@ app.get('/pedidos', checkUrl, (request, response) => {
 })
 
 app.post('/pedidos', checkUrl, (request, response) => {
-    const { order, name, price, status } = request.body
+    const { order, name } = request.body
 
-    const pedido = { id:uuid.v4(), order, name, price, status }
+    const pedido = { id:uuid.v4(), order, name }
     
     pedidos.push(pedido)
     return response.status(201).json(pedido)
 })
 
 app.put('/pedidos/:id', checkPedidoId, checkUrl, (request, response) => {
-    const { order, name, price, status } = request.body
+    const { order, name } = request.body
     const index = request.pedidoIndex
     const id = request.pedidoId
 
-    const updatePedido = { id, order, name, price, status }
+    const updatePedido = { id, order, name }
 
     pedidos[index] = updatePedido
 
@@ -73,8 +74,7 @@ app.patch('/pedidos/:id', checkPedidoId, checkUrl, (request, response) => {
     const updateStatus = {
         id,
         order: pedidos[index].order,
-        name: pedidos[index].name,
-        price: pedidos[index].price, 
+        name: pedidos[index].name, 
         status: "Pronto" }
 
     pedidos[index] = updateStatus
